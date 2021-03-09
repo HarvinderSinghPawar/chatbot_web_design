@@ -1,355 +1,495 @@
-<!doctype html>
-<html lang="en">
+<html>
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- Bootstrap CSS -->
-    <link href="bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <title>chat box</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Oswald:400,300);
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .popup-box {
+            background-color: #e0d8d8;
+            border: 1px solid #b0b0b0;
+            bottom: 60px;
+            right: 0;
+            display: none;
+            height: 415px;
+            position: fixed;
+            right: 70px;
+            width: 300px;
+            font-family: 'Open Sans', sans-serif;
+
+        }
+
+        .round.hollow {
+
+            margin: 40px 0 0;
+
+        }
+
+        .round.hollow a {
+            display: flex;
+            bottom: 0px;
+            right: 20px;
+            position: fixed;
+            background-color: rgb(6, 27, 148);
+            border: 2px solid black;
+            border-radius: 2px;
+            color: white;
+            font-size: 18px;
+            padding: 10px 21px;
+            text-decoration: none;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .round.hollow a:hover {
+            border: 2px solid #000;
+            border-radius: 2px;
+            color: rgb(216, 213, 213);
+            font-size: 18px;
+            padding: 10px 21px;
+            text-decoration: none;
+        }
+
+        .popup-box-on {
+            display: block !important;
+            right: 20px;
+        }
+
+        .popup-box .popup-head {
+            background-color: #fff;
+            clear: both;
+            color: rgb(25, 44, 104);
+            display: inline-table;
+            font-size: 15px;
+            padding: 7px 10px;
+            width: 100%;
+            border: 1px solid black;
+            font-family: Oswald;
+        }
+
+        .bg_none i {
+            border: 1px solid #ff6701;
+            border-radius: 25px;
+            color: #ff6701;
+            font-size: 17px;
+            height: 33px;
+            line-height: 30px;
+            width: 33px;
+        }
+
+        .bg_none:hover i {
+            border: 1px solid #000;
+            border-radius: 25px;
+            color: #000;
+            font-size: 17px;
+            height: 33px;
+            line-height: 30px;
+            width: 33px;
+        }
+
+        .bg_none {
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+            border: medium none;
+        }
+
+        .popup-box .popup-head .popup-head-right {
+            width: 30px;
+            margin: 11px 7px 0;
+        }
+
+        .popup-box .popup-messages { }
+
+        .popup-head-left img {
+            border: 1px solid #7b7b7b;
+            border-radius: 50%;
+            width: 44px;
+        }
+
+        .popup-messages-footer>textarea {
+            border-bottom: 1px solid #b2b2b2 !important;
+            height: 34px !important;
+            margin: 7px;
+            padding: 5px !important;
+            border: medium none;
+            width: 95% !important;
+        }
+
+        .popup-messages-footer {
+            border: 1px solid black;
+            background: #fff none repeat scroll 0 0;
+            bottom: 0;
+            position: absolute;
+            width: 100%;
+        }
+
+        .popup-messages-footer .btn-footer {
+            overflow: hidden;
+            padding: 2px 5px 10px 6px;
+            width: 100%;
+        }
+
+        .simple_round {
+            background: #d1d1d1 none repeat scroll 0 0;
+            border-radius: 50%;
+            color: #4b4b4b !important;
+            height: 21px;
+            padding: 0 0 0 1px;
+            width: 21px;
+        }
+
+        .wrapper {
+            position: relative;
+            border: 1px solid red;
+            width: 300px;
+            height: 700px;
+            bottom: 0px;
+            right: 0px;
+        }
+
+        /* Inside Chat*/
+        
+        .container {
+
+            max-width: 493px;
+            margin: auto;
+        }
+
+        .container #message1 {
+            margin-top: 10px;
+        }
 
 
-    <!-- Optional JavaScript; choose one of the two! -->
+        img {
+            max-width: 100%;
+        }
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="bootstrap-4.3.1-dist/js/bootstrap.min.js"
-        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-        crossorigin="anonymous"></script>
+        .inbox_people {
+            background: #f8f8f8 none repeat scroll 0 0;
+            float: left;
+            overflow: hidden;
+            width: 40%;
+            border-right: 1px solid #c4c4c4;
+        }
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
-    -->
-    <title>Vashudev Innovative Software</title>
+        .inbox_msg {
+            border: 1px solid #c4c4c4;
+            clear: both;
+            overflow: hidden;
+        }
+
+        .top_spac {
+            margin: 20px 0 0;
+        }
+
+
+        .recent_heading {
+            float: left;
+            width: 40%;
+        }
+
+        .srch_bar {
+            display: inline-block;
+            text-align: right;
+            width: 60%;
+            padding:
+        }
+
+        .headind_srch {
+            padding: 10px 29px 10px 20px;
+            overflow: hidden;
+            border-bottom: 1px solid #c4c4c4;
+        }
+
+        .recent_heading h4 {
+            color: #05728f;
+            font-size: 21px;
+            margin: auto;
+        }
+
+        .srch_bar input {
+            border: 1px solid #cdcdcd;
+            border-width: 0 0 1px 0;
+            width: 80%;
+            padding: 2px 0 4px 6px;
+            background: none;
+        }
+
+        .srch_bar .input-group-addon button {
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+            border: medium none;
+            padding: 0;
+            color: #707070;
+            font-size: 18px;
+        }
+
+        .srch_bar .input-group-addon {
+            margin: 0 0 0 -27px;
+        }
+
+        .chat_ib h5 {
+            font-size: 15px;
+            color: #464646;
+            margin: 0 0 8px 0;
+        }
+
+        .chat_ib h5 span {
+            font-size: 13px;
+            float: right;
+        }
+
+        .chat_ib p {
+            font-size: 14px;
+            color: #989898;
+            margin: auto
+        }
+
+        .chat_img {
+            float: left;
+            width: 11%;
+        }
+
+        .chat_ib {
+            float: left;
+            padding: 0 0 0 15px;
+            width: 88%;
+        }
+
+        .chat_people {
+            overflow: hidden;
+            clear: both;
+        }
+
+        .chat_list {
+            border-bottom: 1px solid #c4c4c4;
+            margin: 0;
+            padding: 18px 16px 10px;
+        }
+
+        .inbox_chat {
+            height: 550px;
+            overflow-y: scroll;
+        }
+
+        .active_chat {
+            margin-top: 10px;
+            width: 266px;
+            background: #ebebeb;
+        }
+
+        .incoming_msg_img {
+            display: inline-block;
+            width: 6%;
+        }
+
+        .received_msg {
+            display: inline-block;
+            padding: 0 0 0 10px;
+            vertical-align: top;
+            width: 92%;
+        }
+
+        .received_withd_msg p {
+            background: #ebebeb none repeat scroll 0 0;
+            border-radius: 3px;
+            color: #646464;
+            font-size: 14px;
+            margin: 0;
+            padding: 5px 10px 5px 12px;
+            width: 100%;
+        }
+
+        .time_date {
+            color: #747474;
+            display: block;
+            font-size: 12px;
+            margin: 8px 0 0;
+        }
+
+        .received_withd_msg {
+            width: 57%;
+        }
+
+        .mesgs {
+            float: left;
+            /* padding: 30px 15px 0 25px; */
+            width: 60%;
+        }
+
+        .sent_msg p {
+            background: #ebebeb none repeat scroll 0 0;
+            border-radius: 3px;
+            font-size: 14px;
+            margin: 0;
+            color: #646464;
+            padding: 5px 10px 5px 12px;
+            width: 100%;
+        }
+
+        .outgoing_msg {
+            overflow: hidden;
+            margin: 6px 0 6px 0px;
+        }
+
+        .sent_msg {
+            float: right;
+            width: 80%;
+        }
+
+        .input_msg_write input {
+            background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+            border: medium none;
+            color: #4c4c4c;
+            font-size: 15px;
+            min-height: 48px;
+            width: 100%;
+        }
+
+        .type_msg {
+            border-top: 1px solid #c4c4c4;
+            position: relative;
+        }
+
+        .msg_send_btn {
+            background: #05728f none repeat scroll 0 0;
+            border: medium none;
+            border-radius: 50%;
+            color: #fff;
+            cursor: pointer;
+            font-size: 17px;
+            height: 33px;
+            position: absolute;
+            right: 0;
+            top: 11px;
+            width: 33px;
+        }
+
+        .messaging {
+            padding: 0 0 50px 0;
+        }
+
+        .msg_history {
+            height: 324px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 
 <body>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
 
-        body {
-            background-color: #edeff2;
-            font-family: "Calibri", "Roboto", sans-serif;
-        }
 
-        .chat_window {
-            position: absolute;
-            width: calc(100% - 20px);
-            max-width: 800px;
-            height: 500px;
-            border-radius: 10px;
-            background-color: #fff;
-            left: 50%;
-            top: 50%;
-            transform: translateX(-50%) translateY(-50%);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            background-color: #f8f8f8;
-            overflow: hidden;
-        }
 
-        .top_menu {
-            background-color: #fff;
-            width: 100%;
-            padding: 20px 0 15px;
-            box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
-        }
+    <div class="popup-box chat-popup" id="qnimate">
+        <div class="popup-head">
+            <div class="popup-head-left pull-left">Vasudev Innovative Software</div>
+            <div class="popup-head-right pull-right">
 
-        .top_menu .buttons {
-            margin: 3px 0 0 20px;
-            position: absolute;
-        }
+                <button data-widget="remove" id="removeClass" class="chat-header-button pull-right" type="button"><img src="letter-x.png" alt="cross"></button>
+            </div>
+        </div>
+        <div class="popup-messages">
+            <div class="container" id="message1">
+                <div class="mesgs">
+                    <div class="msg_history">
+                        <div class="incoming_msg">
+                            <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                    alt="sunil"> </div>
+                            <div class="received_msg">
+                                <div class="received_withd_msg">
+                                    <p>Test which is a new approach to have all
+                                        solutions</p>
+                                    <span class="time_date"> 11:01 AM | June 9</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="outgoing_msg">
+                            <div class="sent_msg">
+                                <p>Test which is a new approach to have all
+                                    solutions</p>
+                                <span class="time_date"> 11:01 AM | June 9</span>
+                            </div>
+                        </div>
+                        <div class="incoming_msg">
+                            <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                    alt="sunil"> </div>
+                            <div class="received_msg">
+                                <div class="received_withd_msg">
+                                    <p>Test, which is a new approach to have</p>
+                                    <span class="time_date"> 11:01 AM | Yesterday</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="outgoing_msg">
+                            <div class="sent_msg">
+                                <p>Apollo University, Delhi, India Test</p>
+                                <span class="time_date"> 11:01 AM | Today</span>
+                            </div>
+                        </div>
+                        <div class="incoming_msg">
+                            <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                    alt="sunil"> </div>
+                            <div class="received_msg">
+                                <div class="received_withd_msg">
+                                    <p>We work directly with our designers and suppliers,
+                                        and sell direct to you, which means quality, exclusive
+                                        products, at a price anyone can afford.</p>
+                                    <span class="time_date"> 11:01 AM | Today</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        .top_menu .buttons .button {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 10px;
-            position: relative;
-        }
+                </div>
+            </div>
 
-        .top_menu .buttons .button.close {
-            background-color: #f5886e;
-        }
+        </div>
+        <div class="popup-messages-footer">
+            <textarea id="status_message" placeholder="Type a message..." rows="10" cols="40" name="message"></textarea>
 
-        .top_menu .buttons .button.minimize {
-            background-color: #fdbf68;
-        }
 
-        .top_menu .buttons .button.maximize {
-            background-color: #a3d063;
-        }
+            <!-- <div class="btn-footer">
+                
+                <button class="bg_none"><span class="glyphicon glyphicon-menu-right"></span> </button>
+                <button class="bg_none"><i class="glyphicon glyphicon-camera"></i> </button>
+                <button class="bg_none"><i class="glyphicon glyphicon-paperclip"></i> </button>
+                <button class="bg_none pull-right"><i class="glyphicon glyphicon-thumbs-up"></i> </button> -->
+        </div>
+    </div>
+    </div>
 
-        .top_menu .title {
-            text-align: center;
-            color: #bcbdc0;
-            font-size: 20px;
-        }
+    <div class="container text-center">
+        <div class="row">
 
-        .messages {
-            position: relative;
-            list-style: none;
-            padding: 20px 10px 0 10px;
-            margin: 0;
-            height: 347px;
-            overflow: scroll;
-        }
 
-        .messages .message {
-            clear: both;
-            overflow: hidden;
-            margin-bottom: 20px;
-            transition: all 0.5s linear;
-            opacity: 0;
-        }
+            <div class="round hollow text-center">
+                <a href="#" id="addClass"><span class="glyphicon glyphicon-comment"></span> Questions? Talk to
+                    expert</a>
+            </div>
 
-        .messages .message.left .avatar {
-            background-color: #f5886e;
-            float: left;
-        }
+            <hr>
 
-        .messages .message.left .text_wrapper {
-            background-color: #ffe6cb;
-            margin-left: 20px;
-        }
 
-        .messages .message.left .text_wrapper::after,
-        .messages .message.left .text_wrapper::before {
-            right: 100%;
-            border-right-color: #ffe6cb;
-        }
-
-        .messages .message.left .text {
-            color: #c48843;
-        }
-
-        .messages .message.right .avatar {
-            background-color: #fdbf68;
-            float: right;
-        }
-
-        .messages .message.right .text_wrapper {
-            background-color: #c7eafc;
-            margin-right: 20px;
-            float: right;
-        }
-
-        .messages .message.right .text_wrapper::after,
-        .messages .message.right .text_wrapper::before {
-            left: 100%;
-            border-left-color: #c7eafc;
-        }
-
-        .messages .message.right .text {
-            color: #45829b;
-        }
-
-        .messages .message.appeared {
-            opacity: 1;
-        }
-
-        .messages .message .avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .messages .message .text_wrapper {
-            display: inline-block;
-            padding: 20px;
-            border-radius: 6px;
-            width: calc(100% - 85px);
-            min-width: 100px;
-            position: relative;
-        }
-
-        .messages .message .text_wrapper::after,
-        .messages .message .text_wrapper:before {
-            top: 18px;
-            border: solid transparent;
-            content: " ";
-            height: 0;
-            width: 0;
-            position: absolute;
-            pointer-events: none;
-        }
-
-        .messages .message .text_wrapper::after {
-            border-width: 13px;
-            margin-top: 0px;
-        }
-
-        .messages .message .text_wrapper::before {
-            border-width: 15px;
-            margin-top: -2px;
-        }
-
-        .messages .message .text_wrapper .text {
-            font-size: 18px;
-            font-weight: 300;
-        }
-
-        .bottom_wrapper {
-            position: relative;
-            width: 100%;
-            background-color: #fff;
-            padding: 20px 20px;
-            position: absolute;
-            bottom: 0;
-        }
-
-        .bottom_wrapper .message_input_wrapper {
-            display: inline-block;
-            height: 50px;
-            border-radius: 25px;
-            border: 1px solid #bcbdc0;
-            width: calc(100% - 160px);
-            position: relative;
-            padding: 0 20px;
-        }
-
-        .bottom_wrapper .message_input_wrapper .message_input {
-            border: none;
-            height: 100%;
-            box-sizing: border-box;
-            width: calc(100% - 40px);
-            position: absolute;
-            outline-width: 0;
-            color: gray;
-        }
-
-        .bottom_wrapper .send_message {
-            width: 140px;
-            height: 50px;
-            display: inline-block;
-            border-radius: 50px;
-            background-color: #a3d063;
-            border: 2px solid #a3d063;
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.2s linear;
-            text-align: center;
-        }
-
-        .bottom_wrapper .send_message:hover {
-            color: #a3d063;
-            background-color: #fff;
-        }
-
-        .bottom_wrapper .send_message .text {
-            font-size: 18px;
-            font-weight: 300;
-            display: inline-block;
-            line-height: 48px;
-        }
-
-        .message_template {
-            display: none;
-        }
-    </style>
-
+        </div>
+    </div>
 
     <script>
-        (function () {
-            var Message;
-            Message = function (arg) {
-                this.text = arg.text, this.message_side = arg.message_side;
-                this.draw = function (_this) {
-                    return function () {
-                        var $message;
-                        $message = $($('.message_template').clone().html());
-                        $message.addClass(_this.message_side).find('.text').html(_this.text);
-                        $('.messages').append($message);
-                        return setTimeout(function () {
-                            return $message.addClass('appeared');
-                        }, 0);
-                    };
-                }(this);
-                return this;
-            };
-            $(function () {
-                var getMessageText, message_side, sendMessage;
-                message_side = 'right';
-                getMessageText = function () {
-                    var $message_input;
-                    $message_input = $('.message_input');
-                    return $message_input.val();
-                };
-                sendMessage = function (text) {
-                    var $messages, message;
-                    if (text.trim() === '') {
-                        return;
-                    }
-                    $('.message_input').val('');
-                    $messages = $('.messages');
-                    message_side = message_side === 'left' ? 'right' : 'left';
-                    message = new Message({
-                        text: text,
-                        message_side: message_side
-                    });
-                    message.draw();
-                    return $messages.animate({ scrollTop: $messages.prop('scrollHeight') }, 300);
-                };
-                $('.send_message').click(function (e) {
-                    return sendMessage(getMessageText());
-                });
-                $('.message_input').keyup(function (e) {
-                    if (e.which === 13) {
-                        return sendMessage(getMessageText());
-                    }
-                });
-                sendMessage('Hello Philip! :)');
-                setTimeout(function () {
-                    return sendMessage('Hi Sandy! How are you?');
-                }, 2000);
-                return setTimeout(function () {
-                    return sendMessage('I\'m fine, thank you!');
-                }, 4000);
+        $(function () {
+            $("#addClass").click(function () {
+                $('#qnimate').addClass('popup-box-on');
             });
-        }.call(this));
+
+            $("#removeClass").click(function () {
+                $('#qnimate').removeClass('popup-box-on');
+            });
+        })
     </script>
-
-
-
-
-    <div class="chat_window">
-        <div class="top_menu">
-            <div class="buttons">
-                <div class="button close"></div>
-                <div class="button minimize"></div>
-                <div class="button maximize"></div>
-            </div>
-            <div class="title">Vasudev Innovative Software</div>
-        </div>
-        <ul class="messages"></ul>
-        <div class="bottom_wrapper clearfix">
-            <div class="message_input_wrapper"><input class="message_input" placeholder="Type your message here..." />
-            </div>
-            <div class="send_message">
-                <div class="icon"></div>
-                <div class="text"><a href="chatbotdesign.html">Send</a></div>
-            </div>
-        </div>
-    </div>
-    <div class="message_template">
-        <li class="message">
-            <div class="avatar"></div>
-            <div class="text_wrapper">
-                <div class="text"></div>
-            </div>
-        </li>
-    </div>
-
-
-
 </body>
 
 </html>
